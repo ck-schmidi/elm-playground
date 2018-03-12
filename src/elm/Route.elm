@@ -9,6 +9,7 @@ import Navigation exposing (Location)
 type Route
     = Home
     | Login
+    | Tryout
 
 
 route : Parser (Route -> a) a
@@ -16,6 +17,7 @@ route =
     oneOf
         [ Url.map Home (s "")
         , Url.map Login (s "login")
+        , Url.map Tryout (s "tryout")
         ]
 
 
@@ -29,6 +31,9 @@ routeToString route =
 
                 Login ->
                     [ "login" ]
+
+                Tryout ->
+                    [ "tryout" ]
     in
         "/#/" ++ (parts |> String.join "/")
 

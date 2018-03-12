@@ -75,4 +75,5 @@ header =
             []
             [ menuItem [ Route.href Route.Home ] [ text "Home" ]
             , menuItem [ Route.href Route.Login ] [ text "Login" ]
+            , menuItem [ Route.href Route.Tryout ] [ text "Tryout" ]
             ]

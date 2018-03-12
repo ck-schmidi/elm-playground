@@ -5,6 +5,7 @@ import Html.Styled as Html
 import Utils exposing ((=>))
 import Page.Login as Login
 import Page.Home as Home
+import Page.Tryout as Tryout
 import Page.Errored as Errored exposing (PageLoadError)
 import Route exposing (Route)
 import Views.Page exposing (frame)
@@ -55,6 +56,7 @@ type Page
     = Blank
     | Home Home.Model
     | Login Login.Model
+    | Tryout Tryout.Model
 
 
 {-| A Page can be either loaded or there is a transition from a current
@@ -81,6 +83,7 @@ type Msg
     | HomeLoaded (Result PageLoadError Home.Model)
     | LoginMsg Login.Msg
     | HomeMsg Home.Msg
+    | TryoutMsg Tryout.Msg
 
 
 
@@ -108,6 +111,9 @@ setRoute maybeRoute model =
         Just (Route.Login) ->
             { model | pageState = Loaded (Login Login.initialModel) } => Cmd.none
 
+        Just (Route.Tryout) ->
+            { model | pageState = Loaded (Tryout Tryout.initialModel) } => Cmd.none
+
 
 {-| Handles routing messages and does dispatching of
   | child module update functions.
@@ -132,6 +138,14 @@ update msg model =
                 in
                     { model | pageState = Loaded (Login newModel) }
                         => (Cmd.map LoginMsg cmd)
+
+            ( TryoutMsg a, Tryout subModel ) ->
+                let
+                    ( newModel, cmd ) =
+                        Tryout.update a subModel
+                in
+                    { model | pageState = Loaded (Tryout newModel) }
+                        => (Cmd.map TryoutMsg cmd)
 
             ( _, _ ) ->
                 model => Cmd.none
@@ -173,6 +187,11 @@ viewPage page =
             Home subModel ->
                 Home.view subModel
                     |> Html.map HomeMsg
+                    |> frame
+
+            Tryout subModel ->
+                Tryout.view subModel
+                    |> Html.map TryoutMsg
                     |> frame
 
             Blank ->

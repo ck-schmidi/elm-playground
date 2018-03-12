@@ -1,7 +1,7 @@
 module Views.Components exposing (..)
 
 import Css exposing (..)
-import Css.Colors exposing (..)
+import Css.Colors exposing (blue, navy, white, red)
 import Html.Styled as Html exposing (..)
 import Html.Styled.Attributes exposing (type_)
 

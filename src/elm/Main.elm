@@ -1,27 +1,40 @@
 port module Application exposing (..)
 
-import Html.Styled exposing (Html, div, program)
+import Html.Styled exposing (Html, div, program, toUnstyled)
 import Html.Styled as Html
 import Utils exposing ((=>))
 import Page.Login as Login
 import Page.Home as Home
+import Page.Errored as Errored exposing (PageLoadError)
+import Route exposing (Route)
+import Views.Page exposing (frame)
+import Task
+import Navigation exposing (Location)
+import Json.Decode as Decode exposing (Value)
 
 
-main : Program Never Model Msg
+main : Program Value Model Msg
 main =
-    program
-        { init = model ! []
-        , view = view
-        , subscriptions = subscriptions
+    Navigation.programWithFlags (Route.fromLocation >> SetRoute)
+        { init = init
+        , view = (view >> toUnstyled)
         , update = update
+        , subscriptions = subscriptions
         }
+
+
+init : Value -> Location -> ( Model, Cmd Msg )
+init val location =
+    setRoute (Route.fromLocation location) model
+
+
+initialPage : Page
+initialPage =
+    Home Home.initialModel
 
 
 
 -- PORT
-
-
-port foo : String -> Cmd msg
 
 
 subscriptions : Model -> Sub Msg
@@ -56,18 +69,36 @@ model =
     , pageState = Loaded (Login Login.initialModel)
     }
 
-
-
 -- ACTIONS
 
 
 type Msg
-    = LoginMsg Login.Msg
+    = SetRoute (Maybe Route)
+    | HomeLoaded (Result PageLoadError Home.Model)
+    | LoginMsg Login.Msg
     | HomeMsg Home.Msg
 
 
 
 -- UPDATE
+
+
+setRoute : Maybe Route -> Model -> ( Model, Cmd Msg )
+setRoute maybeRoute model =
+    let
+        transition toMsg task =
+            { model | pageState = TransitioningFrom (getPage model) }
+                => Task.attempt toMsg task
+    in
+        case maybeRoute of
+            Nothing ->
+                { model | pageState = Loaded (Home Home.initialModel) } => Cmd.none
+
+            Just (Route.Home) ->
+                { model | pageState = Loaded (Home Home.initialModel) } => Cmd.none
+
+            Just (Route.Login) ->
+                { model | pageState = Loaded (Login Login.initialModel) } => Cmd.none
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -77,6 +108,9 @@ update msg model =
             getPage model
     in
         case ( msg, page ) of
+            ( SetRoute route, _ ) ->
+                setRoute route model
+
             ( HomeMsg a, Home subModel ) ->
                 model => Cmd.none
 
@@ -116,10 +150,14 @@ viewPage page =
     div []
         [ case page of
             Login subModel ->
-                Login.view subModel |> Html.map LoginMsg
+                Login.view subModel
+                    |> Html.map LoginMsg
+                    |> frame
 
             Home subModel ->
-                Home.view subModel |> Html.map HomeMsg
+                Home.view subModel
+                    |> Html.map HomeMsg
+                    |> frame
 
             Blank ->
                 div [] []

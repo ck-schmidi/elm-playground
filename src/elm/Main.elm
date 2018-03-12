@@ -13,6 +13,12 @@ import Navigation exposing (Location)
 import Json.Decode as Decode exposing (Value)
 
 
+{-| Current browser url gets injected and handled by
+  | Navigation.programWithFlags and internal message
+  | SetRoute. Since we use elm-css and there is no drop in
+  | replacement for Navigation.programWithFlags style translation
+  | is done manually.
+-}
 main : Program Value Model Msg
 main =
     Navigation.programWithFlags (Route.fromLocation >> SetRoute)
@@ -23,20 +29,16 @@ main =
         }
 
 
+{-| Set initial route from startup
+-}
 init : Value -> Location -> ( Model, Cmd Msg )
 init val location =
-    setRoute (Route.fromLocation location) model
+    setRoute (Route.fromLocation location)
+        { pageState = Loaded (Home Home.initialModel) }
 
 
-initialPage : Page
-initialPage =
-    Home Home.initialModel
-
-
-
--- PORT
-
-
+{-| Currently no subscriptions are used
+-}
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.none
@@ -46,25 +48,27 @@ subscriptions model =
 -- MODEL
 
 
+{-| A Page defines a single page which can be shown by the application.
+  | There is one Page value for each page with its attached model.
+-}
 type Page
     = Blank
     | Home Home.Model
     | Login Login.Model
 
 
+{-| A Page can be either loaded or there is a transition from a current
+  | page to a new page.
+-}
 type PageState
     = Loaded Page
     | TransitioningFrom Page
 
 
+{-| Application model holds the current pageState.
+-}
 type alias Model =
     { pageState : PageState
-    }
-
-
-model : Model
-model =
-    { pageState = Loaded (Login Login.initialModel)
     }
 
 
@@ -83,6 +87,9 @@ type Msg
 -- UPDATE
 
 
+{-| Maps the requested root to according page or get init tasks from
+  | requested page modules.
+-}
 setRoute : Maybe Route -> Model -> ( Model, Cmd Msg )
 setRoute maybeRoute model =
     let
@@ -101,6 +108,9 @@ setRoute maybeRoute model =
                 { model | pageState = Loaded (Login Login.initialModel) } => Cmd.none
 
 
+{-| Handles routing messages and does dispatching of
+  | child module update functions.
+-}
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     let
@@ -130,6 +140,8 @@ update msg model =
 -- VIEW
 
 
+{-| get current page from model (removes loaded/transitioning information)
+-}
 getPage : Model -> Page
 getPage model =
     case model.pageState of
@@ -140,11 +152,14 @@ getPage model =
             page
 
 
+{-| -}
 view : Model -> Html Msg
 view =
     getPage >> viewPage
 
 
+{-| Renders child page within a globally used frame.
+-}
 viewPage : Page -> Html Msg
 viewPage page =
     div []

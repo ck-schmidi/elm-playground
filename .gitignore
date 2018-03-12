@@ -1,0 +1,7 @@
+node_modules/
+elm-stuff/
+.DS_Store
+npm-debug.log
+.vscode/
+package-lock.json
+public/javascripts/

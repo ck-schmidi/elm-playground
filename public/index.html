@@ -1,0 +1,38 @@
+<html class="no-js" lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>FWSS</title>
+    <meta name="description" content="">
+
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <!-- Place favicon.ico in the root directory -->
+
+    <!-- ADD YOUR SITE VENDOR FONTS DEPENDENSIES AFTER -->
+    <!-- ADD YOUR SITE VENDOR FONTS DEPENDENSIES AFTER -->
+
+    <!-- ADD YOUR SITE VENDOR STYLESHEETS DEPENDENSIES AFTER -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css">
+    <!-- ADD YOUR SITE VENDOR STYLESHEETS DEPENDENSIES AFTER -->
+
+    <!-- ADD YOUR SITE VENDOR JAVASCRIPT DEPENDENSIES AFTER -->
+    <script src="javascripts/elm.js" type="text/javascript" charset="utf-8"></script>
+    <script src="javascripts/application.js" type="text/javascript" charset="utf-8"></script>
+    <!-- ADD YOUR SITE VENDOR JAVASCRIPT DEPENDENSIES BEFORE -->
+
+
+  </head>
+  <body id="body">
+    <script type="text/javascript" charset="utf-8">
+        var app = Elm.Application.fullscreen();
+        app.ports.foo.subscribe(function(word){
+            console.log("from port:" + word)
+            return word;
+        });
+    </script>
+    <!-- HERE APPLICATION WILL BE INJECTED -->
+  </body>
+</html>

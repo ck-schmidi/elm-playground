@@ -4,6 +4,7 @@ import Css exposing (..)
 import Css.Colors exposing (blue, navy, white, red)
 import Html.Styled as Html exposing (..)
 import Html.Styled.Attributes exposing (type_)
+import Theme exposing (colorPalette)
 
 
 -- HTML Components
@@ -26,33 +27,17 @@ password list =
 
 h1 : List (Attribute msg) -> List (Html msg) -> Html msg
 h1 =
-    styled Html.h1 [ theme.font ]
+    styled Html.h1 [ fontStyle ]
 
 
 h2 : List (Attribute msg) -> List (Html msg) -> Html msg
 h2 =
-    styled Html.h2 [ theme.font ]
+    styled Html.h2 [ fontStyle ]
 
 
 h3 : List (Attribute msg) -> List (Html msg) -> Html msg
 h3 =
-    styled Html.h3 [ theme.font, color theme.primary ]
-
-
-theme :
-    { primary : Color
-    , secondary : Color
-    , text : Color
-    , error : Color
-    , font : Style
-    }
-theme =
-    { primary = blue
-    , secondary = navy
-    , text = white
-    , error = red
-    , font = fontFamilies [ "Roboto" ]
-    }
+    styled Html.h3 [ fontStyle, color colorPalette.textIcon ]
 
 
 
@@ -69,17 +54,22 @@ paddingStyle =
     padding (px 12)
 
 
+fontStyle : Style
+fontStyle =
+    fontFamilies [ "Roboto" ]
+
+
 buttonStyle : Style
 buttonStyle =
     Css.batch
         [ textAlign center
-        , backgroundColor theme.primary
+        , backgroundColor colorPalette.primary
         , border3 (px 1) solid transparent
-        , color theme.text
+        , color colorPalette.textIcon
         , display inlineBlock
-        , hover [ backgroundColor theme.secondary ]
+        , hover [ backgroundColor colorPalette.accent ]
           --
-        , theme.font
+        , fontStyle
         , borderRadiusStyle
         , paddingStyle
         ]
@@ -91,7 +81,7 @@ inputStyle =
         [ backgroundColor white
         , border3 (px 1) solid (rgba 0 0 0 0.2)
           --
-        , theme.font
+        , fontStyle
         , borderRadiusStyle
         , paddingStyle
         ]

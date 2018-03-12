@@ -87,25 +87,26 @@ type Msg
 -- UPDATE
 
 
+transition : Model -> (Result x a -> msg) -> Task.Task x a -> ( Model, Cmd msg )
+transition model toMsg task =
+    { model | pageState = TransitioningFrom (getPage model) }
+        => Task.attempt toMsg task
+
+
 {-| Maps the requested root to according page or get init tasks from
   | requested page modules.
 -}
 setRoute : Maybe Route -> Model -> ( Model, Cmd Msg )
 setRoute maybeRoute model =
-    let
-        transition toMsg task =
-            { model | pageState = TransitioningFrom (getPage model) }
-                => Task.attempt toMsg task
-    in
-        case maybeRoute of
-            Nothing ->
-                { model | pageState = Loaded (Home Home.initialModel) } => Cmd.none
+    case maybeRoute of
+        Nothing ->
+            { model | pageState = Loaded (Home Home.initialModel) } => Cmd.none
 
-            Just (Route.Home) ->
-                { model | pageState = Loaded (Home Home.initialModel) } => Cmd.none
+        Just (Route.Home) ->
+            { model | pageState = Loaded (Home Home.initialModel) } => Cmd.none
 
-            Just (Route.Login) ->
-                { model | pageState = Loaded (Login Login.initialModel) } => Cmd.none
+        Just (Route.Login) ->
+            { model | pageState = Loaded (Login Login.initialModel) } => Cmd.none
 
 
 {-| Handles routing messages and does dispatching of

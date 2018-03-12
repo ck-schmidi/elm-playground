@@ -1,15 +1,35 @@
 module Views.Page exposing (frame, ActivePage)
 
 import Color
-import Html.Styled as Html exposing (Html, div, text, ul, li, a)
-import Svg.Styled as Svg exposing (Svg)
+import Html.Styled as Html exposing (Html, div, text, ul, li, a, styled, span)
+import Svg.Styled as Svg exposing (Svg, fromUnstyled)
+import Css
+    exposing
+        ( pt
+        , pct
+        , width
+        , height
+        , backgroundColor
+        , displayFlex
+        , flexDirection
+        , row
+        , alignItems
+        , center
+        , px
+        , padding
+        , paddingRight
+        , textDecoration
+        , none
+        , color
+        , hex
+        )
+import Route exposing (Route)
+import Theme exposing (colorPalette)
 
 
 --import Material.Icons.Action exposing (account_balance)
-
-import Material.Icons.Navigation exposing (unfold_less)
-import Material.Icons.Device exposing (sd_storage)
-import Route exposing (Route)
+--import Material.Icons.Navigation exposing (unfold_less)
+--import Material.Icons.Device exposing (sd_storage)
 
 
 type ActivePage
@@ -28,16 +48,31 @@ frame content =
 
 header : Html msg
 header =
-    div []
-        [ --Svg.fromUnstyled (sd_storage Color.red 25)
-          div []
-            [ ul []
-                [ li []
-                    [ a [ Route.href Route.Home ] [ text "Home" ]
-                    ]
-                , li []
-                    [ a [ Route.href Route.Login ] [ text "Login" ]
-                    ]
+    let
+        headerStyle =
+            Css.batch
+                [ width (pct 100)
+                , height (pt 20)
+                , padding (pt 15)
+                , backgroundColor colorPalette.primary
+                , displayFlex
+                , flexDirection row
+                , alignItems center
                 ]
+
+        menuItemStyle =
+            Css.batch
+                [ paddingRight (pt 20)
+                , textDecoration none
+                , color colorPalette.textIcon
+                ]
+
+        menuItem =
+            styled a [ menuItemStyle ]
+    in
+        styled div
+            [ headerStyle ]
+            []
+            [ menuItem [ Route.href Route.Home ] [ text "Home" ]
+            , menuItem [ Route.href Route.Login ] [ text "Login" ]
             ]
-        ]

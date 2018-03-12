@@ -7,12 +7,12 @@ import Html.Styled exposing (Html, div, text)
 
 
 type alias Model =
-    Int
+    String
 
 
 initialModel : Model
 initialModel =
-    0
+    "Hello World"
 
 
 
@@ -21,7 +21,7 @@ initialModel =
 
 view : Model -> Html Msg
 view model =
-    div [] [ "Hello " |> text ]
+    div [] [ model |> text ]
 
 
 

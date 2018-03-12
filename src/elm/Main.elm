@@ -58,16 +58,16 @@ type PageState
 
 
 type alias Model =
-    { login : Login.Model
-    , pageState : PageState
+    { pageState : PageState
     }
 
 
 model : Model
 model =
-    { login = Login.initialModel
-    , pageState = Loaded (Login Login.initialModel)
+    { pageState = Loaded (Login Login.initialModel)
     }
+
+
 
 -- ACTIONS
 

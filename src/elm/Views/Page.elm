@@ -22,6 +22,7 @@ import Css
         , none
         , color
         , hex
+        , margin
         )
 import Route exposing (Route)
 import Theme exposing (colorPalette)
@@ -52,8 +53,7 @@ header =
         headerStyle =
             Css.batch
                 [ width (pct 100)
-                , height (pt 20)
-                , padding (pt 15)
+                , height (pt 40)
                 , backgroundColor colorPalette.primary
                 , displayFlex
                 , flexDirection row
@@ -62,7 +62,7 @@ header =
 
         menuItemStyle =
             Css.batch
-                [ paddingRight (pt 20)
+                [ margin (pt 15)
                 , textDecoration none
                 , color colorPalette.textIcon
                 ]

@@ -8,6 +8,7 @@ import Navigation exposing (Location)
 
 type Route
     = Home
+    | Blank
     | Login
     | Tryout
 
@@ -16,6 +17,7 @@ route : Parser (Route -> a) a
 route =
     oneOf
         [ Url.map Home (s "")
+        , Url.map Blank (s "blank")
         , Url.map Login (s "login")
         , Url.map Tryout (s "tryout")
         ]
@@ -28,6 +30,9 @@ routeToString route =
             case route of
                 Home ->
                     []
+
+                Blank ->
+                    [ "blank" ]
 
                 Login ->
                     [ "login" ]

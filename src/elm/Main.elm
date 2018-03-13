@@ -105,6 +105,9 @@ setRoute maybeRoute model =
         Nothing ->
             { model | pageState = Loaded (Home Home.initialModel) } => Cmd.none
 
+        Just (Route.Blank) ->
+            { model | pageState = Loaded Blank } => Cmd.none
+
         Just (Route.Home) ->
             { model | pageState = Loaded (Home Home.initialModel) } => Cmd.none
 
@@ -196,4 +199,5 @@ viewPage page =
 
             Blank ->
                 div [] []
+                    |> frame
         ]

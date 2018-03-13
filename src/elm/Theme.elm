@@ -11,7 +11,7 @@ type alias ColorPalette =
     , accent : Color
     , primaryText : Color
     , secondaryText : Color
-    , dividerColor : Color
+    , divider : Color
     }
 
 
@@ -31,5 +31,5 @@ c1 =
     , accent = (hex "536DFE")
     , primaryText = (hex "212121")
     , secondaryText = (hex "757575")
-    , dividerColor = (hex "BDBDBD")
+    , divider = (hex "BDBDBD")
     }

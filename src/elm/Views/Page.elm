@@ -23,6 +23,11 @@ import Css
         , color
         , hex
         , margin
+        , transparent
+        , borderBottom
+        , borderBottomColor
+        , borderBottomStyle
+        , solid
         )
 import Route exposing (Route)
 import Theme exposing (colorPalette)
@@ -55,6 +60,9 @@ header =
                 [ width (pct 100)
                 , height (pt 40)
                 , backgroundColor colorPalette.primary
+                , borderBottom (pt 2)
+                , borderBottomColor colorPalette.divider
+                , borderBottomStyle solid
                 , displayFlex
                 , flexDirection row
                 , alignItems center

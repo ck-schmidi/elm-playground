@@ -1,18 +1,21 @@
 module Page.Tryout exposing (..)
 
-import Html.Styled exposing (Html, div, text)
+import Html.Styled exposing (Html, div, text, styled, span)
+import Html.Styled.Events exposing (onClick)
+import Views.Components as Components exposing (button)
+import Css exposing (width, pt, margin)
 
 
 -- MODEL --
 
 
 type alias Model =
-    String
+    Int
 
 
 initialModel : Model
 initialModel =
-    "Tryout"
+    0
 
 
 
@@ -21,7 +24,20 @@ initialModel =
 
 view : Model -> Html Msg
 view model =
-    div [] [ model |> text ]
+    let
+        button =
+            styled Components.button
+                [ width (pt 100)
+                , margin (pt 10)
+                ]
+    in
+        div []
+            [ button [ onClick Inc ] [ text "+" ]
+            , model
+                |> toString
+                |> text
+            , button [ onClick Dec ] [ text "-" ]
+            ]
 
 
 
@@ -29,9 +45,15 @@ view model =
 
 
 type Msg
-    = NoOp
+    = Inc
+    | Dec
 
 
 update : Msg -> Model -> ( Model, Cmd msg )
 update msg model =
-    model ! []
+    case msg of
+        Inc ->
+            (model + 1) ! []
+
+        Dec ->
+            (model - 1) ! []

@@ -31,6 +31,7 @@ import Css
         )
 import Route exposing (Route)
 import Theme exposing (colorPalette)
+import Views.Style exposing (menuItemStyle)
 
 
 --import Material.Icons.Action exposing (account_balance)
@@ -66,13 +67,6 @@ header =
                 , displayFlex
                 , flexDirection row
                 , alignItems center
-                ]
-
-        menuItemStyle =
-            Css.batch
-                [ margin (pt 15)
-                , textDecoration none
-                , color colorPalette.textIcon
                 ]
 
         menuItem =

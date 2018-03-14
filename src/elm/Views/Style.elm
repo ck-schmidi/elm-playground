@@ -17,7 +17,10 @@ paddingStyle =
 
 fontStyle : Style
 fontStyle =
-    fontFamilies [ "Roboto" ]
+    batch
+        [ fontFamilies [ "Roboto" ]
+        , fontWeight (int 200)
+        ]
 
 
 menuItemStyle : Style

@@ -1,6 +1,6 @@
 module Views.Components exposing (..)
 
-import Css exposing (color)
+import Css exposing (color, hex)
 import Html.Styled as Html exposing (..)
 import Html.Styled.Attributes exposing (type_)
 import Theme exposing (colorPalette)
@@ -38,3 +38,8 @@ h2 =
 h3 : List (Attribute msg) -> List (Html msg) -> Html msg
 h3 =
     styled Html.h3 [ fontStyle, color colorPalette.secondaryText ]
+
+
+error : String -> Html msg
+error str=
+    styled Html.span [ fontStyle, color (hex "f00") ] [][str |> text]

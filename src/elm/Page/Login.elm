@@ -4,10 +4,11 @@ import Html.Styled exposing (Html, div, text, form, styled, a, li, ul, span)
 import Html.Styled.Attributes exposing (placeholder, value)
 import Html.Styled.Events exposing (onInput, onSubmit)
 import Views.Components as Components exposing (button, input, h1, h3)
-import Css exposing (width, px, pct, margin, cursor, pointer, textAlign, center, color, hex, textDecoration, none)
+import Css exposing (width, px, pct, pt, margin, cursor, pointer, textAlign, center, color, hex, textDecoration, none)
 import Utils exposing ((=>))
 import Validate exposing (Validator, ifBlank, ifInvalidEmail, validate)
 import Route exposing (Route, href)
+import Theme exposing (colorPalette)
 
 
 --import Json.Decode as Decode exposing (Decoder, decodeString, field, string)
@@ -44,12 +45,12 @@ view model =
             Css.margin (px 5)
     in
         styled div
-            [ Css.width (pct 40)
+            [ Css.width (pt 400)
             , Css.displayFlex
             , Css.flexDirection Css.column
             ]
             []
-            [ styled div [ textAlign center ] [] [ h1 [] [ "Sign in " |> text ] ]
+            [ styled div [ textAlign center, color colorPalette.primaryText ] [] [ h1 [] [ "Sign in " |> text ] ]
             , styled a [ textAlign center, textDecoration none ] [ href Route.Home ] [ h3 [] [ "Need an account?" |> text ] ]
             , form
                 [ onSubmit SubmitForm ]
@@ -78,7 +79,7 @@ viewFormError field errors =
         |> List.map
             (\( _, error ) ->
                 li []
-                    [ styled span [ color (hex "f00") ] [] [ (error |> text) ] ]
+                    [ error |> Components.error ]
             )
         |> ul []
 

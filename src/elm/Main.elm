@@ -168,6 +168,10 @@ update msg model =
                     { model | pageState = Loaded (Autocomplete newModel) }
                         => (Cmd.map AutocompleteMsg cmd)
 
+            -- if msg and current page doesn't match, it gets ignored.
+            -- it could be happen if a request takes a long time and
+            -- user switches page before request is finished and model
+            -- gets updated.
             ( _, _ ) ->
                 model => Cmd.none
 

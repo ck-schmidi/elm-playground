@@ -53,8 +53,8 @@ routeToString route =
 
 
 href : Route -> Attribute msg
-href route =
-    Attr.href (routeToString route)
+href =
+    routeToString >> Attr.href
 
 
 modifyUrl : Route -> Cmd msg

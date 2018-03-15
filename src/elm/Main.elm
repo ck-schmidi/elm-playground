@@ -6,6 +6,7 @@ import Utils exposing ((=>))
 import Page.Login as Login
 import Page.Home as Home
 import Page.Tryout as Tryout
+import Page.Autocomplete as Autocomplete
 import Page.Errored as Errored exposing (PageLoadError)
 import Route exposing (Route)
 import Views.Page exposing (frame)
@@ -57,6 +58,7 @@ type Page
     | Home Home.Model
     | Login Login.Model
     | Tryout Tryout.Model
+    | Autocomplete Autocomplete.Model
 
 
 {-| A Page can be either loaded or there is a transition from a current
@@ -84,6 +86,7 @@ type Msg
     | LoginMsg Login.Msg
     | HomeMsg Home.Msg
     | TryoutMsg Tryout.Msg
+    | AutocompleteMsg Autocomplete.Msg
 
 
 
@@ -101,21 +104,28 @@ transition model toMsg task =
 -}
 setRoute : Maybe Route -> Model -> ( Model, Cmd Msg )
 setRoute maybeRoute model =
-    case maybeRoute of
-        Nothing ->
-            { model | pageState = Loaded (Home Home.initialModel) } => Cmd.none
+    let
+        updateStandardPage page subModel =
+            { model | pageState = Loaded (page subModel) } => Cmd.none
+    in
+        case maybeRoute of
+            Nothing ->
+                updateStandardPage Home Home.initialModel
 
-        Just (Route.Blank) ->
-            { model | pageState = Loaded Blank } => Cmd.none
+            Just (Route.Blank) ->
+                { model | pageState = Loaded Blank } => Cmd.none
 
-        Just (Route.Home) ->
-            { model | pageState = Loaded (Home Home.initialModel) } => Cmd.none
+            Just (Route.Home) ->
+                updateStandardPage Home Home.initialModel
 
-        Just (Route.Login) ->
-            { model | pageState = Loaded (Login Login.initialModel) } => Cmd.none
+            Just (Route.Login) ->
+                updateStandardPage Login Login.initialModel
 
-        Just (Route.Tryout) ->
-            { model | pageState = Loaded (Tryout Tryout.initialModel) } => Cmd.none
+            Just (Route.Tryout) ->
+                updateStandardPage Tryout Tryout.initialModel
+
+            Just (Route.Autocomplete) ->
+                updateStandardPage Autocomplete Autocomplete.init
 
 
 {-| Handles routing messages and does dispatching of
@@ -149,6 +159,14 @@ update msg model =
                 in
                     { model | pageState = Loaded (Tryout newModel) }
                         => (Cmd.map TryoutMsg cmd)
+
+            ( AutocompleteMsg a, Autocomplete subModel ) ->
+                let
+                    ( newModel, cmd ) =
+                        Autocomplete.update a subModel
+                in
+                    { model | pageState = Loaded (Autocomplete newModel) }
+                        => (Cmd.map AutocompleteMsg cmd)
 
             ( _, _ ) ->
                 model => Cmd.none
@@ -195,6 +213,11 @@ viewPage page =
             Tryout subModel ->
                 Tryout.view subModel
                     |> Html.map TryoutMsg
+                    |> frame
+
+            Autocomplete subModel ->
+                Autocomplete.view subModel
+                    |> Html.map AutocompleteMsg
                     |> frame
 
             Blank ->

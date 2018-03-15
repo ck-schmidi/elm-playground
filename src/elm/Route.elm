@@ -11,6 +11,7 @@ type Route
     | Blank
     | Login
     | Tryout
+    | Autocomplete
 
 
 route : Parser (Route -> a) a
@@ -20,6 +21,7 @@ route =
         , Url.map Blank (s "blank")
         , Url.map Login (s "login")
         , Url.map Tryout (s "tryout")
+        , Url.map Autocomplete (s "autocomplete")
         ]
 
 
@@ -39,6 +41,9 @@ routeToString route =
 
                 Tryout ->
                     [ "tryout" ]
+
+                Autocomplete ->
+                    [ "autocomplete" ]
     in
         "/#/" ++ (parts |> String.join "/")
 

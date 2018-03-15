@@ -13,8 +13,8 @@ type alias Model =
     Int
 
 
-initialModel : Model
-initialModel =
+init : Model
+init =
     0
 
 

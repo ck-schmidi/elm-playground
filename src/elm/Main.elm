@@ -36,7 +36,7 @@ main =
 init : Value -> Location -> ( Model, Cmd Msg )
 init val location =
     setRoute (Route.fromLocation location)
-        { pageState = Loaded (Home Home.initialModel) }
+        { pageState = Loaded (Home Home.init) }
 
 
 {-| Currently no subscriptions are used
@@ -110,19 +110,19 @@ setRoute maybeRoute model =
     in
         case maybeRoute of
             Nothing ->
-                updateStandardPage Home Home.initialModel
+                updateStandardPage Home Home.init
 
             Just (Route.Blank) ->
                 { model | pageState = Loaded Blank } => Cmd.none
 
             Just (Route.Home) ->
-                updateStandardPage Home Home.initialModel
+                updateStandardPage Home Home.init
 
             Just (Route.Login) ->
-                updateStandardPage Login Login.initialModel
+                updateStandardPage Login Login.init
 
             Just (Route.Tryout) ->
-                updateStandardPage Tryout Tryout.initialModel
+                updateStandardPage Tryout Tryout.init
 
             Just (Route.Autocomplete) ->
                 updateStandardPage Autocomplete Autocomplete.init

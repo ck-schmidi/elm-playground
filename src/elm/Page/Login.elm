@@ -23,8 +23,8 @@ type alias Model =
     }
 
 
-initialModel : Model
-initialModel =
+init : Model
+init =
     { errors = []
     , email = ""
     , password = ""

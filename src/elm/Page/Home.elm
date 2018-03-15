@@ -10,8 +10,8 @@ type alias Model =
     String
 
 
-initialModel : Model
-initialModel =
+init : Model
+init =
     "Hello World"
 
 

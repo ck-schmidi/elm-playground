@@ -7,6 +7,7 @@ import Page.Login as Login
 import Page.Home as Home
 import Page.Tryout as Tryout
 import Page.Autocomplete as Autocomplete
+import Page.Remote as Remote
 import Page.Errored as Errored exposing (PageLoadError)
 import Route exposing (Route)
 import Views.Page exposing (frame)
@@ -59,6 +60,8 @@ type Page
     | Login Login.Model
     | Tryout Tryout.Model
     | Autocomplete Autocomplete.Model
+    | Remote Remote.Model
+    | Errored PageLoadError
 
 
 {-| A Page can be either loaded or there is a transition from a current
@@ -87,6 +90,8 @@ type Msg
     | HomeMsg Home.Msg
     | TryoutMsg Tryout.Msg
     | AutocompleteMsg Autocomplete.Msg
+    | RemoteMsg Remote.Msg
+    | RemoteLoaded (Result PageLoadError Remote.Model)
 
 
 
@@ -126,6 +131,9 @@ setRoute maybeRoute model =
 
             Just (Route.Autocomplete) ->
                 updateStandardPage Autocomplete Autocomplete.init
+
+            Just (Route.Remote) ->
+                transition model RemoteLoaded Remote.init
 
 
 {-| Handles routing messages and does dispatching of
@@ -168,6 +176,20 @@ update msg model =
                     { model | pageState = Loaded (Autocomplete newModel) }
                         => (Cmd.map AutocompleteMsg cmd)
 
+            ( RemoteMsg a, Remote subModel ) ->
+                let
+                    ( newModel, cmd ) =
+                        Remote.update a subModel
+                in
+                    { model | pageState = Loaded (Remote newModel) }
+                        => (Cmd.map RemoteMsg cmd)
+
+            ( RemoteLoaded (Ok subModel), _ ) ->
+                { model | pageState = Loaded (Remote subModel) } => Cmd.none
+
+            ( RemoteLoaded (Err error), _ ) ->
+                { model | pageState = Loaded (Errored error) } => Cmd.none
+
             -- if msg and current page doesn't match, it gets ignored.
             -- it could be happen if a request takes a long time and
             -- user switches page before request is finished and model
@@ -194,37 +216,51 @@ getPage model =
 
 {-| -}
 view : Model -> Html Msg
-view =
-    getPage >> viewPage
+view model =
+    case model.pageState of
+        Loaded page ->
+            viewPage False page
+
+        TransitioningFrom page ->
+            viewPage True page
 
 
 {-| Renders child page within a globally used frame.
 -}
-viewPage : Page -> Html Msg
-viewPage page =
+viewPage : Bool -> Page -> Html Msg
+viewPage isLoading page =
     div []
         [ case page of
             Login subModel ->
                 Login.view subModel
                     |> Html.map LoginMsg
-                    |> frame
+                    |> frame isLoading
 
             Home subModel ->
                 Home.view subModel
                     |> Html.map HomeMsg
-                    |> frame
+                    |> frame isLoading
 
             Tryout subModel ->
                 Tryout.view subModel
                     |> Html.map TryoutMsg
-                    |> frame
+                    |> frame isLoading
 
             Autocomplete subModel ->
                 Autocomplete.view subModel
                     |> Html.map AutocompleteMsg
-                    |> frame
+                    |> frame isLoading
+
+            Remote subModel ->
+                Remote.view subModel
+                    |> Html.map RemoteMsg
+                    |> frame isLoading
+
+            Errored _ ->
+                div [] [ "ERROR" |> Html.text ]
+                    |> frame isLoading
 
             Blank ->
                 div [] []
-                    |> frame
+                    |> frame isLoading
         ]

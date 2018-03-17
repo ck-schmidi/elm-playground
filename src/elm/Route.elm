@@ -12,6 +12,7 @@ type Route
     | Login
     | Tryout
     | Autocomplete
+    | Remote
 
 
 route : Parser (Route -> a) a
@@ -22,6 +23,7 @@ route =
         , Url.map Login (s "login")
         , Url.map Tryout (s "tryout")
         , Url.map Autocomplete (s "autocomplete")
+        , Url.map Remote (s "remote")
         ]
 
 
@@ -44,6 +46,9 @@ routeToString route =
 
                 Autocomplete ->
                     [ "autocomplete" ]
+
+                Remote ->
+                    [ "remote" ]
     in
         "/#/" ++ (parts |> String.join "/")
 

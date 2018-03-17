@@ -1,0 +1,22 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "title": "cleanup balcony",
+      "duration": 45,
+      "urgency": 0
+    },
+    {
+      "id": 2,
+      "title": "setup zigbee network",
+      "duration": 60,
+      "urgency": 0
+    },
+    {
+      "id": 3,
+      "title": "play around with elm",
+      "duration": 34,
+      "urgency": 1
+    }
+  ]
+}

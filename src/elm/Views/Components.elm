@@ -41,5 +41,5 @@ h3 =
 
 
 error : String -> Html msg
-error str=
-    styled Html.span [ fontStyle, color (hex "f00") ] [][str |> text]
+error str =
+    styled Html.span [ fontStyle, color (hex "f00") ] [] [ str |> text ]

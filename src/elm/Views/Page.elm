@@ -1,4 +1,4 @@
-module Views.Page exposing (frame, ActivePage)
+module Views.Page exposing (frame, ActivePage(..))
 
 import Color
 import Html.Styled as Html exposing (Html, div, text, ul, li, a, styled, span)
@@ -45,16 +45,16 @@ type ActivePage
     | Login
 
 
-frame : Html msg -> Html msg
-frame content =
+frame : Bool -> Html msg -> Html msg
+frame isLoading content =
     div []
-        [ header
+        [ header isLoading
         , content
         ]
 
 
-header : Html msg
-header =
+header : Bool -> Html msg
+header isLoading =
     let
         headerStyle =
             Css.batch
@@ -80,4 +80,9 @@ header =
             , menuItem [ Route.href Route.Tryout ] [ text "Tryout" ]
             , menuItem [ Route.href Route.Blank ] [ text "Blank" ]
             , menuItem [ Route.href Route.Autocomplete ] [ text "Autocomplete" ]
+            , menuItem [ Route.href Route.Remote ] [ text "API Tests" ]
+            , if isLoading then
+                div [] [ "loading ..." |> text ]
+              else
+                div [] []
             ]
